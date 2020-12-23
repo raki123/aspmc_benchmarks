@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import sys
+import networkx as nx
 import random
 
 base_smoker = '''
@@ -24,9 +27,10 @@ def gen_smoker(n):
     for i in range(1, n + 1):
         wf += f"*(pToS({i})*#(0.3) + npToS({i})*#(0.7))"
         fp.write(f"person({i}).\n")
+    graph = nx.generators.random_graphs.barabasi_albert_graph(n, 2)
     for i in range(1, n + 1):
         for j in range(1, n + 1):
-            if i != j and random.random() < 0.5:
+            if graph.has_edge(i,j):
                 f.write(f"friend_of({i},{j}).\n")
                 prob = random.random()
                 fp.write(f"friend_of({i},{j},{prob}).\n")
