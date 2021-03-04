@@ -20,8 +20,8 @@ query(smokes(X)).
 '''
 def gen_smoker(n, k):
     wf = "#(1)"
-    f = open(f"smokers_{n},{k}.lp", 'w')
-    fp = open(f"smokers_{n},{k}_prob.lp", 'w')
+    f = open(f"smokers_{n}_{k}.lp", 'w')
+    fp = open(f"smokers_{n}_{k}_prob.lp", 'w')
     f.write(f"person(1..{n}).\n")
     for i in range(1, n + 1):
         wf += f"*(pToS({i})*#(0.3) + npToS({i})*#(0.7))"
