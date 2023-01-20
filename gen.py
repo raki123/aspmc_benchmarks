@@ -3,6 +3,17 @@
 import sys
 import networkx as nx
 import random
+import os
+
+folders = [ "viral" ]
+folders += [ "gh_pita", "gh_problog", "gh_lpmln" ]
+folders += [ "gnb_pita", "gnb_problog", "gnb_lpmln" ]
+folders += [ "tree_pita", "tree_problog", "tree_lpmln" ]
+
+for folder in folders:
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+
 
 base_smoker_prob = '''
 0.5::pToS(X) :- person(X).
@@ -112,7 +123,7 @@ def gen_gnb(n, format ="problog"):
         fp.write(":- end_lpad.")
     fp.close()
 
-def gen_tree(n, k, format ="problog"):
+def gen_tree(n, k):
     tree = nx.random_tree(n, create_using=nx.DiGraph)
     network = nx.DiGraph() 
     extra_nodes = list(range(n, n + k))
@@ -142,7 +153,7 @@ def gen_tree(n, k, format ="problog"):
         fp.write(f"0.1::delayed({v}).\n")
         children = [ u for _, u in network.out_edges(v) if u != v ]
         if len(children) > 0:
-            prob = 1.0/len(children)
+            prob = 1.0/(len(children) + 1)
             fp.write(";".join( f"{prob}::reach({u})" for u in children ))
             fp.write(f":- reach({v})")
             fp.write(f", \+ delayed({v})")
@@ -160,11 +171,14 @@ elif sys.argv[1] == "cycle":
 elif sys.argv[1] == "grid":
     gen_grid(int(sys.argv[2]), int(sys.argv[3]))
 elif sys.argv[1] == "gh":
-    gen_gh(int(sys.argv[2]), format=sys.argv[-1])
+    gen_gh(int(sys.argv[2]), format="problog")
+    gen_gh(int(sys.argv[2]), format="pita")
 elif sys.argv[1] == "gnb":
-    gen_gnb(int(sys.argv[2]), format=sys.argv[-1])
+    gen_gnb(int(sys.argv[2]), format="problog")
+    gen_gnb(int(sys.argv[2]), format="pita")
 elif sys.argv[1] == "tree":
-    gen_tree(int(sys.argv[2]), int(sys.argv[3]), format=sys.argv[-1])
+    gen_tree(int(sys.argv[2]), int(sys.argv[3]), format="problog")
+    gen_tree(int(sys.argv[2]), int(sys.argv[3]), format="pita")
 elif sys.argv[1].isnumeric():
     x = int(sys.argv[1])
     for i in range(3, x):
