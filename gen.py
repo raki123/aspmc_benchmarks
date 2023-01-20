@@ -138,13 +138,12 @@ def gen_tree(n, k, format ="problog"):
         fp = open(f"tree_problog/tree_{n}_{k}.lp", 'w')
         fp.write(f"query(reach({final_node})).\n")
     fp.write(f"reach(0).\n")
-    fp.write(f"reach(Y) :- take(X,Y).\n")
     for v in network.nodes():
         fp.write(f"0.1::delayed({v}).\n")
         children = [ u for _, u in network.out_edges(v) if u != v ]
         if len(children) > 0:
             prob = 1.0/len(children)
-            fp.write(";".join( f"{prob}::take({v},{u})" for u in children ))
+            fp.write(";".join( f"{prob}::reach({u})" for u in children ))
             fp.write(f":- reach({v})")
             fp.write(f", \+ delayed({v})")
             fp.write(".\n")
