@@ -123,7 +123,7 @@ def gen_gnb(n, format ="problog"):
         fp.write(":- end_lpad.")
     fp.close()
 
-def gen_tree(n, k):
+def gen_tree(n, k, format="problog"):
     tree = nx.random_tree(n, create_using=nx.DiGraph)
     network = nx.DiGraph() 
     extra_nodes = list(range(n, n + k))
