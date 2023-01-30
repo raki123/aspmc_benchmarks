@@ -6,9 +6,10 @@ import random
 import os
 
 folders = [ "viral" ]
-folders += [ "gh_pita", "gh_problog", "gh_lpmln" ]
-folders += [ "gnb_pita", "gnb_problog", "gnb_lpmln" ]
-folders += [ "tree_pita", "tree_problog", "tree_lpmln" ]
+folders += [ "pita", "problog", "lpmln" ]
+folders += [ "pita/gh", "problog/gh", "lpmln/gh" ]
+folders += [ "pita/gnb", "problog/gnb", "lpmln/gnb" ]
+folders += [ "pita/tree", "problog/tree", "lpmln/tree" ]
 
 for folder in folders:
     if not os.path.exists(folder):
@@ -86,14 +87,14 @@ def gen_grid(k,l):
 
 def gen_gh(n, format ="problog"):
     if format == "pita":
-        fp = open(f"gh_pita/gh_{n}_prob.lp", 'w')
+        fp = open(f"pita/gh/gh_{n}_prob.lp", 'w')
         fp.write(""":- use_module(library(pita)).
 :- pita.
 :- begin_lpad.
 """)
         fp.write("query(a0):-a0.\n")
     else:
-        fp = open(f"gh_problog/gh_{n}_prob.lp", 'w')
+        fp = open(f"problog/gh/gh_{n}_prob.lp", 'w')
         fp.write("query(a0).\n")
     for i in range(1, n):
         fp.write(f"0.5::a{i}.\n")
@@ -106,14 +107,14 @@ def gen_gh(n, format ="problog"):
 def gen_gnb(n, format ="problog"):
     bs = '\\'
     if format == "pita":
-        fp = open(f"gnb_pita/gnb_{n}_prob.lp", 'w')
+        fp = open(f"pita/gnb/gnb_{n}_prob.lp", 'w')
         fp.write(""":- use_module(library(pita)).
 :- pita.
 :- begin_lpad.
 """)
         fp.write("query(a0):-a0.\n")
     else:
-        fp = open(f"gnb_problog/gnb_{n}_prob.lp", 'w')
+        fp = open(f"problog/gnb/gnb_{n}_prob.lp", 'w')
         fp.write("query(a0).\n")
     for i in range(n):
         for j in range(i+1,n):
@@ -139,14 +140,14 @@ def gen_tree(n, k, format="problog"):
 
     bs = '\\'
     if format == "pita":
-        fp = open(f"tree_pita/tree_{n}_{k}.lp", 'w')
+        fp = open(f"pita/tree/tree_{n}_{k}.lp", 'w')
         fp.write(""":- use_module(library(pita)).
 :- pita.
 :- begin_lpad.
 """)
         fp.write(f"query(reach({final_node})):-reach({final_node}).\n")
     else:
-        fp = open(f"tree_problog/tree_{n}_{k}.lp", 'w')
+        fp = open(f"problog/tree/tree_{n}_{k}.lp", 'w')
         fp.write(f"query(reach({final_node})).\n")
     fp.write(f"reach(0).\n")
     for v in network.nodes():
